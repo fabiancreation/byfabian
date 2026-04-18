@@ -229,15 +229,24 @@ export const campaigns: Campaign[] = [
       "id": "09",
       "src": "/images/yamada/bomber-jacket/09.jpg",
       "alt": "Yamada — Bomber — frame 09",
-      "width": 1792,
-      "height": 2400,
-      "aspect": "portrait",
+      "width": 2400,
+      "height": 1339,
+      "aspect": "landscape",
       "feature": false
     },
     {
       "id": "10",
       "src": "/images/yamada/bomber-jacket/10.jpg",
       "alt": "Yamada — Bomber — frame 10",
+      "width": 1792,
+      "height": 2400,
+      "aspect": "portrait",
+      "feature": false
+    },
+    {
+      "id": "11",
+      "src": "/images/yamada/bomber-jacket/11.jpg",
+      "alt": "Yamada — Bomber — frame 11",
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
