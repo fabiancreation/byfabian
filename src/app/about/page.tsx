@@ -67,8 +67,8 @@ export default function AboutPage() {
             src="/images/yamada/about/portrait.jpg"
             alt="Yamada — close portrait"
             label="MUSE · YAMADA"
-            mode="cover"
-            aspect="3/4"
+            width={1792}
+            height={2400}
             priority
             sizes="(max-width: 768px) 100vw, 40vw"
           />
@@ -199,10 +199,9 @@ export default function AboutPage() {
           .about-hero {
             grid-template-columns: 1.4fr 1fr !important;
             gap: 56px !important;
-            align-items: stretch !important;
+            align-items: start !important;
           }
-          .about-hero-image { align-self: stretch; display: flex; }
-          .about-hero-image > * { width: 100%; }
+          .about-hero-image { width: 100%; }
           .about-discipline { grid-template-columns: repeat(3, 1fr) !important; gap: 40px !important; }
           .about-yamada { grid-template-columns: 1fr 1fr !important; gap: 56px !important; align-items: start; }
         }
