@@ -23,11 +23,6 @@ export const campaigns: Campaign[] = [
   "year": 2026,
   "tagline": "Ten frames. One unguarded hour.",
   "description": "A study in close quiet. No wardrobe, no set — just natural window light, bare skin, and the small shifts of a face that has nothing to prove. The series reads like a casting tape for someone who already has the part.",
-  "tools": [
-    "Flux 1.1",
-    "ComfyUI",
-    "Lightroom"
-  ],
   "cover": "/images/yamada/face-expressions/01.jpg",
   "coverAspect": "portrait",
   "heroFrame": "03",
@@ -144,11 +139,6 @@ export const campaigns: Campaign[] = [
   "year": 2026,
   "tagline": "Cold wall, warm stare.",
   "description": "Platinum hair against a bleached-out wall. A bomber that's seen things. This was the mood-board test that became a campaign — proof that a single model can carry editorial weight without a crew, a location scout, or a plane ticket.",
-  "tools": [
-    "Flux 1.1",
-    "ComfyUI",
-    "Magnific"
-  ],
   "cover": "/images/yamada/bomber-jacket/01.jpg",
   "coverAspect": "landscape",
   "heroFrame": "01",
@@ -261,11 +251,6 @@ export const campaigns: Campaign[] = [
   "year": 2026,
   "tagline": "Los Angeles, twenty minutes before blue hour.",
   "description": "An activewear campaign concept shot on a rooftop that doesn't exist, with a model that doesn't exist, at a golden hour that was every golden hour. Built to show how ByFabian can deliver a full brand campaign — on-location energy without the location budget.",
-  "tools": [
-    "Flux 1.1",
-    "ComfyUI",
-    "Topaz"
-  ],
   "cover": "/images/yamada/alo/01.jpg",
   "coverAspect": "landscape",
   "heroFrame": "01",
@@ -383,11 +368,6 @@ export const campaigns: Campaign[] = [
   "tagline": "Studies, b-sides, and frames between campaigns.",
   "shortTag": "Studies, b-sides, frames",
   "description": "Six frames that didn't fit anywhere else — colour studies, lighting tests, character moments. The cutting-room floor turned into its own short series. Less polished than the campaigns, more honest about how the work gets made.",
-  "tools": [
-    "Flux 1.1",
-    "ComfyUI",
-    "Lightroom"
-  ],
   "cover": "/images/yamada/mix/06.jpg",
   "coverAspect": "portrait",
   "heroImage": {

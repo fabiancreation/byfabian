@@ -76,7 +76,7 @@ function ProductTile({ product }: { product: Product }) {
   const inner = (
     <article
       style={{
-        background: "#fff",
+        background: "#fafaf7",
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -86,7 +86,7 @@ function ProductTile({ product }: { product: Product }) {
         style={{
           position: "relative",
           aspectRatio: "3 / 4",
-          background: "#fff",
+          background: "#fafaf7",
         }}
       >
         <Image
@@ -107,7 +107,7 @@ function ProductTile({ product }: { product: Product }) {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "#1a1814",
-              background: "rgba(255,255,255,0.92)",
+              background: "rgba(250,250,247,0.92)",
               padding: "4px 8px",
             }}
           >

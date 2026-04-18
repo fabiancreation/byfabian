@@ -46,7 +46,6 @@ export type Campaign = {
   /** Optional short version of the tagline (~24 chars) for spec-strip cells. */
   shortTag?: string;
   description: string;
-  tools: string[];
   cover: string;
   coverAspect: Aspect;
   heroFrame?: string;
