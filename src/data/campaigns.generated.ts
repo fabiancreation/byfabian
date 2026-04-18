@@ -373,15 +373,15 @@ export const campaigns: Campaign[] = [
     "ComfyUI",
     "Lightroom"
   ],
-  "cover": "/images/yamada/mix/01.jpg",
-  "coverAspect": "landscape",
+  "cover": "/images/yamada/mix/06.jpg",
+  "coverAspect": "portrait",
   "heroImage": {
-    "id": "01",
-    "src": "/images/yamada/mix/01.jpg",
-    "alt": "Yamada — Mix — frame 01",
-    "width": 2400,
-    "height": 1792,
-    "aspect": "landscape",
+    "id": "06",
+    "src": "/images/yamada/mix/06.jpg",
+    "alt": "Yamada — Mix — frame 06",
+    "width": 1792,
+    "height": 2400,
+    "aspect": "portrait",
     "feature": true
   },
   "draft": false,
@@ -393,7 +393,7 @@ export const campaigns: Campaign[] = [
       "width": 2400,
       "height": 1792,
       "aspect": "landscape",
-      "feature": true
+      "feature": false
     },
     {
       "id": "02",
@@ -438,7 +438,7 @@ export const campaigns: Campaign[] = [
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
-      "feature": false
+      "feature": true
     }
   ]
 }
