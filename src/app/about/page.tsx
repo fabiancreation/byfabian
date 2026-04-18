@@ -90,8 +90,8 @@ export default function AboutPage() {
       >
         {[
           ["DIRECT", "Brief, board, casting, voice. The same first 20% of any shoot — but compressed."],
-          ["DIFFUSE", "Models, sets, light, wardrobe rendered in Flux + Comfy with custom LoRAs and a tight reference library."],
-          ["DELIVER", "Polish in Topaz, finish in Lightroom. Final frames graded for press, e-com, and OOH."],
+          ["DIFFUSE", "Models, sets, light, wardrobe — generated frame by frame with a proprietary pipeline and a tight reference library."],
+          ["DELIVER", "Polished, graded, finished. Final frames ready for press, social media, e-com, and OOH."],
         ].map(([k, v]) => (
           <div key={k}>
             <div
