@@ -88,6 +88,10 @@ layoutHints?: ("hero" | "wide" | "pair" | "trio" | "solo" | "pullquote")[];
 
 Then in `planLayout`, take that array as a manual sequence of row kinds and walk `images[]` filling in frames in order. Not implemented yet — wait until a campaign needs it.
 
+## Backlog / open ideas
+
+- **No case study structure yet:** Brief → Concept → Deliverables → Result. Campaign detail pages currently show only the editorial frames + tagline + spec strip. A real case study (what the brief was, how the concept was developed, what was delivered, what the result was) is missing and would make the work read as commercial proof rather than just a contact sheet.
+
 ## Local dev
 
 ```bash
