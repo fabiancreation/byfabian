@@ -30,6 +30,7 @@ function HeroA({ campaign }: Props) {
         src={heroSrc(campaign)}
         alt={heroAlt(campaign)}
         label={`${campaign.title.toUpperCase()} · 01`}
+        mode="cover"
         fill
         priority
         sizes="100vw"
@@ -122,6 +123,7 @@ function HeroB({ campaign }: Props) {
         src={heroSrc(campaign)}
         alt={heroAlt(campaign)}
         label={`${campaign.title.toUpperCase()} · 01`}
+        mode="cover"
         fill
         priority
         sizes="100vw"
@@ -373,6 +375,7 @@ export function HeroMobile({ campaign }: Props) {
           src={heroSrc(campaign)}
           alt={heroAlt(campaign)}
           label={`${campaign.title.toUpperCase()} · 01`}
+          mode="cover"
           fill
           priority
           sizes="100vw"

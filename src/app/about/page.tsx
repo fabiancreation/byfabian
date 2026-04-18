@@ -172,6 +172,7 @@ export default function AboutPage() {
                 src={i.src}
                 alt={i.alt}
                 label={`${c.title.toUpperCase()} · ${i.id}`}
+                mode="cover"
                 aspect="4/5"
                 sizes="(max-width: 768px) 50vw, 25vw"
               />

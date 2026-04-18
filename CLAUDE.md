@@ -46,6 +46,47 @@ chosen.
 - Uses Resend if `RESEND_API_KEY` is set, otherwise dry-run (logs server-side)
 - Set in Vercel project env: `RESEND_API_KEY`, optionally `CONTACT_FROM`, `CONTACT_TO`
 
+## Campaign image system
+
+Each campaign has **three asset classes** with different rules:
+
+| Field | Format | Purpose | Rendered with |
+|---|---|---|---|
+| `cover` (string) | Portrait (4:5) | Index/About tile | `Frame mode="cover" aspect="4/5"` (cropped to fit) |
+| `heroImage` (CampaignImage) | Cinematic (16:9 ideal) | Campaign opener | Letterboxed inside `--bg2` stage, capped at 88vh / 920px (never cropped) |
+| `images[]` (CampaignImage[]) | Natural aspect | Editorial body | `Frame` in default `mode="fit"` — natural aspect from `width × height`, never cropped |
+
+### Layout planner
+
+`src/lib/layout.ts` `planLayout(images, excludeIds)` walks `images[]` and emits a sequence of rows. The hero frame (if present in `images[]`) is excluded so it never appears twice.
+
+Row types:
+- **wide** — landscape/square frame, full-width inside the page padding
+- **trio** — 3 portraits side by side
+- **pair** — 2 portraits side by side
+- **solo** — 1 portrait alone, max-width 720px, centered (avoided when possible — planner prefers pairs over orphan solos)
+
+Portrait grouping prefers pairs:
+- 4 portraits → `[2, 2]` not `[3, 1]`
+- 5 → `[3, 2]`
+- 6 → `[3, 3]`
+
+A **pullquote divider** is inserted after the second body row. (Future: configurable position.)
+
+### Hero/cover fallbacks
+
+If `heroImage` isn't set, the page falls back to the first landscape body frame and logs a build-time warning. If `cover` isn't set, it stays whatever string is in the data — there's no auto-fallback for the index tile, so always set `cover`.
+
+### Layout overrides (future)
+
+If the auto-planner ever produces a layout you want to override (e.g., force a solo when planner emits a trio), add an optional field to the campaign data:
+
+```ts
+layoutHints?: ("hero" | "wide" | "pair" | "trio" | "solo" | "pullquote")[];
+```
+
+Then in `planLayout`, take that array as a manual sequence of row kinds and walk `images[]` filling in frames in order. Not implemented yet — wait until a campaign needs it.
+
 ## Local dev
 
 ```bash

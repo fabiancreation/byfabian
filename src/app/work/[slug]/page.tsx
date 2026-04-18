@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { campaigns, getCampaign, getAdjacentCampaigns } from "@/data/campaigns";
 import type { CampaignImage } from "@/data/types";
 import { Nav } from "@/components/Nav";
 import { Frame } from "@/components/Frame";
+import { planLayout } from "@/lib/layout";
 import { CampaignClosing } from "./CampaignClosing";
 
 export async function generateStaticParams() {
@@ -27,17 +29,32 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-function pickImage(images: CampaignImage[], id: string): CampaignImage {
-  return images.find((i) => i.id === id) || images[0];
-}
-
-/** Truncate to N chars on a word boundary (for the tagline spec cell). */
 function shortTag(s: string, max = 28): string {
   const clean = s.replace(/\.$/, "").trim();
   if (clean.length <= max) return clean.toUpperCase();
   const cut = clean.slice(0, max);
   const sp = cut.lastIndexOf(" ");
   return (sp > 12 ? cut.slice(0, sp) : cut).toUpperCase();
+}
+
+/**
+ * Resolve the hero image: prefer dedicated `heroImage`, fall back to first
+ * landscape body frame, then to first body frame. Logs a build-time warning
+ * when falling back so we know which campaigns still need a dedicated hero.
+ */
+function resolveHero(slug: string, hero: CampaignImage | undefined, body: CampaignImage[]): CampaignImage | null {
+  if (hero) return hero;
+  const landscape = body.find((i) => i.aspect === "landscape");
+  if (landscape) {
+    console.warn(`[campaign:${slug}] no heroImage set — falling back to first landscape frame ${landscape.id}`);
+    return landscape;
+  }
+  const first = body[0];
+  if (first) {
+    console.warn(`[campaign:${slug}] no heroImage set and no landscape frames — falling back to ${first.id}`);
+    return first;
+  }
+  return null;
 }
 
 export default async function CampaignPage(props: { params: Promise<{ slug: string }> }) {
@@ -47,18 +64,14 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
 
   const { next } = getAdjacentCampaigns(slug);
   const imgs = campaign.images;
+  const hero = resolveHero(slug, campaign.heroImage, imgs);
 
-  // B-rhythm placement: cinematic opener, 2-up portraits, divider, 3-up, 16:9
-  // beat, full-bleed closer. Falls back to whatever frames exist.
-  const opener = pickImage(imgs, campaign.heroFrame || "01");
-  const pair = [pickImage(imgs, "02"), pickImage(imgs, "03")];
-  const triptych = [pickImage(imgs, "04"), pickImage(imgs, "05"), pickImage(imgs, "06")];
-  const beat = pickImage(imgs, "07");
-  const closer = pickImage(imgs, "08") || pickImage(imgs, "01");
+  // Body excludes the hero frame so it never appears twice.
+  const heroIds = hero ? [hero.id] : [];
+  const rows = planLayout(imgs, heroIds);
 
   const titleUpper = campaign.title.toUpperCase();
   const cat = campaign.category.toUpperCase();
-  // Pull-quote: split tagline into two lines and accent the second half.
   const taglineRaw = campaign.tagline.replace(/\.$/, "").toUpperCase();
   const taglineParts = taglineRaw.includes(",")
     ? [taglineRaw.split(",")[0], taglineRaw.split(",").slice(1).join(",").trim()]
@@ -74,7 +87,6 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
     <>
       <Nav />
 
-      {/* Breadcrumb strip */}
       <div
         style={{
           display: "flex",
@@ -89,7 +101,6 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         <span className="eye eye-accent">CAMPAIGN {campaign.number} / {titleUpper}</span>
       </div>
 
-      {/* Title block — U voice: mono eyebrow, big plain sans, accent dot */}
       <header style={{ padding: "48px clamp(20px, 5vw, 48px) 28px" }}>
         <span className="eye eye-accent">
           {cat} · {campaign.year} · {pad(imgs.length)} FRAMES
@@ -120,7 +131,6 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         </p>
       </header>
 
-      {/* Spec strip — line-bordered cells, no inverted band */}
       <div className="spec-strip">
         {[
           ["TAGLINE", (campaign.shortTag || shortTag(campaign.tagline)).toUpperCase()],
@@ -146,116 +156,100 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         ))}
       </div>
 
-      {/* 1 — cinematic opener (21:9) */}
-      <div style={{ padding: "40px clamp(20px, 5vw, 48px) 20px" }}>
-        <Frame
-          src={opener.src}
-          alt={opener.alt}
-          label={`${titleUpper} · ${opener.id}`}
-          aspect="21/9"
-          priority
-          sizes="100vw"
-        />
-      </div>
+      {/* Hero — natural aspect, height-capped, centered. Never crops. */}
+      {hero && <HeroBlock hero={hero} title={titleUpper} />}
 
-      {/* 2-up portraits */}
-      {pair[0] && pair[1] && (
-        <div
-          className="grid-2-up"
-          style={{
-            padding: "0 clamp(20px, 5vw, 48px) 40px",
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 16,
-          }}
-        >
-          {pair.map((img) => (
-            <Frame
-              key={img.id}
-              src={img.src}
-              alt={img.alt}
-              label={`${titleUpper} · ${img.id}`}
-              aspect="4/5"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          ))}
-        </div>
-      )}
+      {/* Body — planner-driven, every frame at its natural aspect */}
+      {rows.map((row, idx) => {
+        if (row.kind === "pullquote") {
+          return (
+            <div key={`pq-${idx}`} style={{ padding: "8px clamp(20px, 5vw, 48px) 48px", textAlign: "center" }}>
+              <blockquote
+                style={{
+                  margin: "0 auto",
+                  maxWidth: 820,
+                  padding: "40px 0",
+                  borderTop: "1px solid var(--line-strong)",
+                  borderBottom: "1px solid var(--line-strong)",
+                  fontWeight: 800,
+                  fontSize: "clamp(28px, 4.2vw, 40px)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em",
+                  color: "var(--ink)",
+                  textTransform: "uppercase",
+                }}
+              >
+                {taglineParts[0]}
+                <br />
+                {taglineParts[1] && (
+                  <span style={{ color: "var(--accent)" }}>{taglineParts[1]}.</span>
+                )}
+              </blockquote>
+            </div>
+          );
+        }
 
-      {/* Pullquote divider — U voice: tight sans, uppercase, accent word */}
-      <div style={{ padding: "0 clamp(20px, 5vw, 48px) 48px", textAlign: "center" }}>
-        <blockquote
-          style={{
-            margin: "0 auto",
-            maxWidth: 820,
-            padding: "40px 0",
-            borderTop: "1px solid var(--line-strong)",
-            borderBottom: "1px solid var(--line-strong)",
-            fontWeight: 800,
-            fontSize: "clamp(28px, 4.2vw, 40px)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.02em",
-            color: "var(--ink)",
-            textTransform: "uppercase",
-          }}
-        >
-          {taglineParts[0]}
-          <br />
-          {taglineParts[1] && (
-            <span style={{ color: "var(--accent)" }}>{taglineParts[1]}.</span>
-          )}
-        </blockquote>
-      </div>
+        if (row.kind === "wide") {
+          const f = row.frames[0];
+          return (
+            <div key={`row-${idx}`} style={{ padding: "0 clamp(20px, 5vw, 48px) 24px" }}>
+              <Frame
+                src={f.src}
+                alt={f.alt}
+                label={`${titleUpper} · ${f.id}`}
+                width={f.width}
+                height={f.height}
+                sizes="100vw"
+              />
+            </div>
+          );
+        }
 
-      {/* 3-up triptych */}
-      {triptych.every(Boolean) && (
-        <div
-          className="grid-3-up"
-          style={{
-            padding: "0 clamp(20px, 5vw, 48px) 40px",
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 16,
-          }}
-        >
-          {triptych.map((img) => (
-            <Frame
-              key={img.id}
-              src={img.src}
-              alt={img.alt}
-              label={`${titleUpper} · ${img.id}`}
-              aspect="4/5"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-          ))}
-        </div>
-      )}
+        if (row.kind === "solo") {
+          const f = row.frames[0];
+          return (
+            <div key={`row-${idx}`} style={{ padding: "0 clamp(20px, 5vw, 48px) 24px", display: "flex", justifyContent: "center" }}>
+              <div style={{ width: "100%", maxWidth: 720 }}>
+                <Frame
+                  src={f.src}
+                  alt={f.alt}
+                  label={`${titleUpper} · ${f.id}`}
+                  width={f.width}
+                  height={f.height}
+                  sizes="(max-width: 768px) 100vw, 720px"
+                />
+              </div>
+            </div>
+          );
+        }
 
-      {/* 16:9 beat */}
-      {beat && (
-        <div style={{ padding: "0 clamp(20px, 5vw, 48px) 40px" }}>
-          <Frame
-            src={beat.src}
-            alt={beat.alt}
-            label={`${titleUpper} · ${beat.id}`}
-            aspect="16/9"
-            sizes="100vw"
-          />
-        </div>
-      )}
-
-      {/* Full-bleed closer */}
-      {closer && (
-        <div>
-          <Frame
-            src={closer.src}
-            alt={closer.alt}
-            label={`${titleUpper} · ${closer.id}`}
-            aspect="21/9"
-            sizes="100vw"
-          />
-        </div>
-      )}
+        // pair or trio
+        const cols = row.kind === "trio" ? 3 : 2;
+        return (
+          <div
+            key={`row-${idx}`}
+            className={cols === 3 ? "row-trio" : "row-pair"}
+            style={{
+              padding: "0 clamp(20px, 5vw, 48px) 24px",
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 16,
+            }}
+          >
+            {row.frames.map((f) => (
+              <Frame
+                key={f.id}
+                src={f.src}
+                alt={f.alt}
+                label={`${titleUpper} · ${f.id}`}
+                width={f.width}
+                height={f.height}
+                sizes={cols === 3 ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 100vw, 50vw"}
+              />
+            ))}
+          </div>
+        );
+      })}
 
       {next && next.slug !== campaign.slug && <CampaignClosing next={next} />}
 
@@ -266,9 +260,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
           border-top: 1px solid var(--line);
           border-bottom: 1px solid var(--line);
         }
-        .spec-cell {
-          padding: 16px 20px;
-        }
+        .spec-cell { padding: 16px 20px; }
         .spec-cell + .spec-cell { border-left: 1px solid var(--line); }
         .spec-cell:nth-child(2n+1) { border-left: none; }
         @media (min-width: 769px) {
@@ -276,10 +268,74 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
           .spec-cell + .spec-cell { border-left: 1px solid var(--line); }
           .spec-cell:nth-child(2n+1) { border-left: 1px solid var(--line); }
           .spec-cell[data-first="1"] { border-left: none !important; }
-          .grid-2-up { grid-template-columns: 1fr 1fr !important; }
-          .grid-3-up { grid-template-columns: 1fr 1fr 1fr !important; }
+          .row-pair { grid-template-columns: 1fr 1fr !important; }
+          .row-trio { grid-template-columns: 1fr 1fr 1fr !important; }
         }
       `}</style>
     </>
+  );
+}
+
+/**
+ * Hero block — letterboxes the hero so portraits/landscapes/cinematic widths
+ * all read intentionally. Image renders at natural ratio inside a centered
+ * stage with `--bg2` letterbox bars.
+ */
+function HeroBlock({ hero, title }: { hero: CampaignImage; title: string }) {
+  return (
+    <div
+      style={{
+        margin: "40px 0 24px",
+        padding: "0 clamp(20px, 5vw, 48px)",
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          background: "var(--bg2)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          // Cap height so portraits don't blow out the page; landscapes still
+          // run wide and cap softer.
+          maxHeight: "min(88vh, 920px)",
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src={hero.src}
+          alt={hero.alt}
+          width={hero.width}
+          height={hero.height}
+          sizes="100vw"
+          priority
+          style={{
+            width: "auto",
+            height: "auto",
+            maxWidth: "100%",
+            maxHeight: "min(88vh, 920px)",
+            objectFit: "contain",
+            display: "block",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            left: 14,
+            fontFamily: "var(--font-mono)",
+            fontSize: 9,
+            letterSpacing: "0.2em",
+            color: "var(--accent)",
+            textShadow: "0 1px 4px rgba(0,0,0,0.4)",
+            opacity: 0.85,
+            pointerEvents: "none",
+          }}
+        >
+          ◉ {title} · {hero.id}
+        </div>
+      </div>
+    </div>
   );
 }

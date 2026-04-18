@@ -58,6 +58,7 @@ function CampaignTile({ c, mobile = false }: { c: Campaign; mobile?: boolean }) 
         src={c.cover}
         alt={`${c.title} — cover`}
         label={`${c.title.toUpperCase()} · 01`}
+        mode="cover"
         aspect="4/5"
       />
       <div
