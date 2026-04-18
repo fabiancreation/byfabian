@@ -47,7 +47,6 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
 
   const { next } = getAdjacentCampaigns(slug);
   const imgs = campaign.images;
-  const featureCount = imgs.filter((i) => i.feature).length;
 
   // B-rhythm placement: cinematic opener, 2-up portraits, divider, 3-up, 16:9
   // beat, full-bleed closer. Falls back to whatever frames exist.
@@ -126,8 +125,8 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         {[
           ["TAGLINE", shortTag(campaign.tagline)],
           ["MODEL", campaign.modelName.toUpperCase()],
-          ["FRAMES", `${pad(imgs.length)} / ${featureCount}★`],
-          ["TOOLS", campaign.tools.slice(0, 3).join(" · ").toUpperCase()],
+          ["FRAMES", pad(imgs.length)],
+          ["CATEGORY", campaign.category.toUpperCase()],
           ["YEAR", String(campaign.year)],
         ].map(([k, v], i) => (
           <div key={k} className="spec-cell" data-first={i === 0 ? "1" : "0"}>
