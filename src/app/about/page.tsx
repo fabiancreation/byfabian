@@ -29,7 +29,7 @@ export default function AboutPage() {
         }}
         className="about-hero"
       >
-        <div>
+        <div className="about-hero-text">
           <span className="eye eye-accent">◉ ABOUT THE STUDIO</span>
           <h1
             style={{
@@ -46,21 +46,32 @@ export default function AboutPage() {
             <br />
             <span style={{ color: "var(--accent)" }}>ZERO SHOOT DAYS.</span>
           </h1>
+          <p
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: "clamp(20px, 2.4vw, 26px)",
+              lineHeight: 1.4,
+              color: "var(--dim)",
+              marginTop: 32,
+              maxWidth: 520,
+            }}
+          >
+            ByFabian is a one-person studio for AI image direction. Every campaign on this site
+            began with a model file, a mood board, and a brief — and ended without a single plane
+            ticket, location scout, or call sheet.
+          </p>
         </div>
-        <div
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontStyle: "italic",
-            fontSize: "clamp(20px, 2.4vw, 26px)",
-            lineHeight: 1.4,
-            color: "var(--dim)",
-            paddingTop: 24,
-            maxWidth: 520,
-          }}
-        >
-          ByFabian is a one-person studio for AI image direction. Every campaign on this site
-          began with a model file, a mood board, and a brief — and ended without a single plane
-          ticket, location scout, or call sheet.
+        <div className="about-hero-image">
+          <Frame
+            src="/images/yamada/about/portrait.jpg"
+            alt="Yamada — close portrait"
+            label="MUSE · YAMADA"
+            mode="cover"
+            aspect="3/4"
+            priority
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
         </div>
       </section>
 
@@ -185,7 +196,13 @@ export default function AboutPage() {
 
       <style>{`
         @media (min-width: 769px) {
-          .about-hero { grid-template-columns: 1.2fr 1fr !important; gap: 56px !important; align-items: end; }
+          .about-hero {
+            grid-template-columns: 1.4fr 1fr !important;
+            gap: 56px !important;
+            align-items: stretch !important;
+          }
+          .about-hero-image { align-self: stretch; display: flex; }
+          .about-hero-image > * { width: 100%; }
           .about-discipline { grid-template-columns: repeat(3, 1fr) !important; gap: 40px !important; }
           .about-yamada { grid-template-columns: 1fr 1fr !important; gap: 56px !important; align-items: start; }
         }
