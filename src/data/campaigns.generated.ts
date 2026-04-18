@@ -167,7 +167,7 @@ export const campaigns: Campaign[] = [
       "src": "/images/yamada/bomber-jacket/02.jpg",
       "alt": "Yamada — Bomber — frame 02",
       "width": 2400,
-      "height": 1792,
+      "height": 1339,
       "aspect": "landscape",
       "feature": false
     },
