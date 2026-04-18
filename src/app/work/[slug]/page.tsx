@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { campaigns, getCampaign, getAdjacentCampaigns } from "@/data/campaigns";
-import type { CampaignImage } from "@/data/types";
 import { Nav } from "@/components/Nav";
 import { Frame } from "@/components/Frame";
 import { planLayout } from "@/lib/layout";
@@ -37,26 +35,6 @@ function shortTag(s: string, max = 28): string {
   return (sp > 12 ? cut.slice(0, sp) : cut).toUpperCase();
 }
 
-/**
- * Resolve the hero image: prefer dedicated `heroImage`, fall back to first
- * landscape body frame, then to first body frame. Logs a build-time warning
- * when falling back so we know which campaigns still need a dedicated hero.
- */
-function resolveHero(slug: string, hero: CampaignImage | undefined, body: CampaignImage[]): CampaignImage | null {
-  if (hero) return hero;
-  const landscape = body.find((i) => i.aspect === "landscape");
-  if (landscape) {
-    console.warn(`[campaign:${slug}] no heroImage set — falling back to first landscape frame ${landscape.id}`);
-    return landscape;
-  }
-  const first = body[0];
-  if (first) {
-    console.warn(`[campaign:${slug}] no heroImage set and no landscape frames — falling back to ${first.id}`);
-    return first;
-  }
-  return null;
-}
-
 export default async function CampaignPage(props: { params: Promise<{ slug: string }> }) {
   const { slug } = await props.params;
   const campaign = getCampaign(slug);
@@ -64,11 +42,8 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
 
   const { next } = getAdjacentCampaigns(slug);
   const imgs = campaign.images;
-  const hero = resolveHero(slug, campaign.heroImage, imgs);
-
-  // Body excludes the hero frame so it never appears twice.
-  const heroIds = hero ? [hero.id] : [];
-  const rows = planLayout(imgs, heroIds);
+  // No separate hero — the work speaks first via the body opener.
+  const rows = planLayout(imgs, []);
 
   const titleUpper = campaign.title.toUpperCase();
   const cat = campaign.category.toUpperCase();
@@ -156,10 +131,8 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         ))}
       </div>
 
-      {/* Hero — natural aspect, height-capped, centered. Never crops. */}
-      {hero && <HeroBlock hero={hero} title={titleUpper} />}
-
       {/* Body — planner-driven, every frame at its natural aspect */}
+      <div style={{ paddingTop: 40 }} />
       {rows.map((row, idx) => {
         if (row.kind === "pullquote") {
           return (
@@ -189,6 +162,8 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
           );
         }
 
+        const isFirstRow = idx === 0;
+
         if (row.kind === "wide") {
           const f = row.frames[0];
           return (
@@ -200,6 +175,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
                 width={f.width}
                 height={f.height}
                 sizes="100vw"
+                priority={isFirstRow}
               />
             </div>
           );
@@ -217,6 +193,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
                   width={f.width}
                   height={f.height}
                   sizes="(max-width: 768px) 100vw, 720px"
+                  priority={isFirstRow}
                 />
               </div>
             </div>
@@ -236,7 +213,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
               gap: 16,
             }}
           >
-            {row.frames.map((f) => (
+            {row.frames.map((f, fIdx) => (
               <Frame
                 key={f.id}
                 src={f.src}
@@ -245,6 +222,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
                 width={f.width}
                 height={f.height}
                 sizes={cols === 3 ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 100vw, 50vw"}
+                priority={isFirstRow && fIdx === 0}
               />
             ))}
           </div>
@@ -276,66 +254,3 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
   );
 }
 
-/**
- * Hero block — letterboxes the hero so portraits/landscapes/cinematic widths
- * all read intentionally. Image renders at natural ratio inside a centered
- * stage with `--bg2` letterbox bars.
- */
-function HeroBlock({ hero, title }: { hero: CampaignImage; title: string }) {
-  return (
-    <div
-      style={{
-        margin: "40px 0 24px",
-        padding: "0 clamp(20px, 5vw, 48px)",
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          background: "var(--bg2)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          // Cap height so portraits don't blow out the page; landscapes still
-          // run wide and cap softer.
-          maxHeight: "min(88vh, 920px)",
-          overflow: "hidden",
-        }}
-      >
-        <Image
-          src={hero.src}
-          alt={hero.alt}
-          width={hero.width}
-          height={hero.height}
-          sizes="100vw"
-          priority
-          style={{
-            width: "auto",
-            height: "auto",
-            maxWidth: "100%",
-            maxHeight: "min(88vh, 920px)",
-            objectFit: "contain",
-            display: "block",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: 12,
-            left: 14,
-            fontFamily: "var(--font-mono)",
-            fontSize: 9,
-            letterSpacing: "0.2em",
-            color: "var(--accent)",
-            textShadow: "0 1px 4px rgba(0,0,0,0.4)",
-            opacity: 0.85,
-            pointerEvents: "none",
-          }}
-        >
-          ◉ {title} · {hero.id}
-        </div>
-      </div>
-    </div>
-  );
-}

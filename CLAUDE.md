@@ -48,13 +48,14 @@ chosen.
 
 ## Campaign image system
 
-Each campaign has **three asset classes** with different rules:
+Each campaign has **two active asset classes** with different rules:
 
 | Field | Format | Purpose | Rendered with |
 |---|---|---|---|
-| `cover` (string) | Portrait (4:5) | Index/About tile | `Frame mode="cover" aspect="4/5"` (cropped to fit) |
-| `heroImage` (CampaignImage) | Cinematic (16:9 ideal) | Campaign opener | Letterboxed inside `--bg2` stage, capped at 88vh / 920px (never cropped) |
-| `images[]` (CampaignImage[]) | Natural aspect | Editorial body | `Frame` in default `mode="fit"` — natural aspect from `width × height`, never cropped |
+| `cover` (string) | Portrait (4:5) | Index/About tile, OpenGraph | `Frame mode="cover" aspect="4/5"` (cropped to fit) |
+| `images[]` (CampaignImage[]) | Natural aspect | Editorial body — first frame is the campaign opener | `Frame` in default `mode="fit"` — natural aspect from `width × height`, never cropped |
+
+**`heroImage` is currently unused** on the campaign detail page. The work speaks first via the body opener (the first frame from `planLayout`), not via a separate cover image. The field stays in the type for future use (e.g. dedicated OG/share images) but doesn't render anywhere right now.
 
 ### Layout planner
 
@@ -73,9 +74,9 @@ Portrait grouping prefers pairs:
 
 A **pullquote divider** is inserted after the second body row. (Future: configurable position.)
 
-### Hero/cover fallbacks
+### Cover
 
-If `heroImage` isn't set, the page falls back to the first landscape body frame and logs a build-time warning. If `cover` isn't set, it stays whatever string is in the data — there's no auto-fallback for the index tile, so always set `cover`.
+Always set `cover` per campaign — there's no fallback. It's used both for the index tile and as the OpenGraph image.
 
 ### Layout overrides (future)
 
