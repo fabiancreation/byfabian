@@ -34,7 +34,7 @@ export default function AboutPage() {
           <h1
             style={{
               fontWeight: 800,
-              fontSize: "clamp(56px, 10vw, 140px)",
+              fontSize: "clamp(40px, 7vw, 98px)",
               lineHeight: 0.85,
               letterSpacing: "-0.04em",
               margin: "14px 0 0",
