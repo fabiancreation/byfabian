@@ -367,6 +367,7 @@ export const campaigns: Campaign[] = [
   "category": "Editorial Studies",
   "year": 2026,
   "tagline": "Studies, b-sides, and frames between campaigns.",
+  "shortTag": "Studies, b-sides, frames",
   "description": "Six frames that didn't fit anywhere else — colour studies, lighting tests, character moments. The cutting-room floor turned into its own short series. Less polished than the campaigns, more honest about how the work gets made.",
   "tools": [
     "Flux 1.1",

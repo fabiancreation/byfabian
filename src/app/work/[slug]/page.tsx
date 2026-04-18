@@ -123,7 +123,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
       {/* Spec strip — line-bordered cells, no inverted band */}
       <div className="spec-strip">
         {[
-          ["TAGLINE", shortTag(campaign.tagline)],
+          ["TAGLINE", (campaign.shortTag || shortTag(campaign.tagline)).toUpperCase()],
           ["MODEL", campaign.modelName.toUpperCase()],
           ["FRAMES", pad(imgs.length)],
           ["CATEGORY", campaign.category.toUpperCase()],
