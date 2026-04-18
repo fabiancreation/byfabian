@@ -1,0 +1,111 @@
+/* ─────────── Reset ─────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 400ms ease, color 400ms ease;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+img, video { display: block; max-width: 100%; }
+
+/* ─────────── Theme tokens ─────────── */
+:root,
+[data-theme="studio"] {
+  --bg: #0c0c0a;
+  --bg2: #141412;
+  --ink: #f2efe6;
+  --dim: #8a8a82;
+  --line: rgba(242,239,230,0.12);
+  --line-strong: rgba(242,239,230,0.22);
+  --accent: #9cff5c;
+  --on-accent: #0c0c0a;
+  --chalk: #f2efe6;
+  --scrim: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(12,12,10,0) 55%, rgba(12,12,10,0.85) 100%);
+  --scrim-top: linear-gradient(180deg, rgba(12,12,10,0.7) 0%, rgba(12,12,10,0.2) 40%, transparent 70%);
+  --grain-opacity: 0.10;
+  --accent-glow: 0 0 12px rgba(156,255,92,0.45);
+  --hero-overlay-text: rgba(242,239,230,0.96);
+  --gradient-card: linear-gradient(180deg, transparent, rgba(12,12,10,0.88));
+  --gradient-knockout: linear-gradient(180deg, rgba(12,12,10,0.82) 0%, rgba(12,12,10,0.65) 55%, rgba(12,12,10,0.95) 100%);
+  --top-radial: radial-gradient(ellipse at top left, rgba(12,12,10,0.72), transparent 70%);
+  --grain-stripe: repeating-linear-gradient(0deg, rgba(156,255,92,0) 0 2px, rgba(156,255,92,0.08) 2px 3px);
+  --grain-blend: screen;
+  --slider-track: #1a1a17;
+}
+
+[data-theme="daylight"] {
+  --bg: #c7dde1;
+  --bg2: #b7cfd4;
+  --ink: #14232b;
+  --dim: #4d6672;
+  --line: rgba(20,35,43,0.16);
+  --line-strong: rgba(20,35,43,0.32);
+  --accent: #e85c3d;
+  --on-accent: #f5efe2;
+  --chalk: #f5efe2;
+  --scrim: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(20,35,43,0) 55%, rgba(20,35,43,0.72) 100%);
+  --scrim-top: linear-gradient(180deg, rgba(20,35,43,0.58) 0%, rgba(20,35,43,0.15) 40%, transparent 70%);
+  --grain-opacity: 0.05;
+  --accent-glow: 0 0 12px rgba(232,92,61,0.45);
+  --hero-overlay-text: #f5efe2;
+  --gradient-card: linear-gradient(180deg, transparent, rgba(20,35,43,0.88));
+  --gradient-knockout: linear-gradient(180deg, rgba(199,221,225,0.7) 0%, rgba(199,221,225,0.5) 55%, rgba(199,221,225,0.92) 100%);
+  --top-radial: radial-gradient(ellipse at top left, rgba(20,35,43,0.5), transparent 70%);
+  --grain-stripe: repeating-linear-gradient(0deg, rgba(20,35,43,0) 0 2px, rgba(20,35,43,0.04) 2px 3px);
+  --grain-blend: multiply;
+  --slider-track: #d8e7eb;
+}
+
+/* ─────────── Fonts ─────────── */
+:root {
+  --font-sans: var(--next-font-sans, "Helvetica Neue", Helvetica, Arial, sans-serif);
+  --font-mono: var(--next-font-mono, "PT Mono", ui-monospace, Menlo, monospace);
+  --font-serif: var(--next-font-serif, "Fraunces", "Playfair Display", Georgia, serif);
+}
+
+/* ─────────── Utility classes ─────────── */
+.eye {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.eye-ink { color: var(--ink); }
+.eye-accent { color: var(--accent); }
+
+.accent-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--accent-glow);
+}
+
+/* No-flash theme: applied by inline script in layout before paint. */
+.no-flash * { transition: none !important; }
+
+/* Frame hover grain — driven by CSS vars per theme */
+.frame-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--grain-stripe);
+  mix-blend-mode: var(--grain-blend);
+  opacity: var(--grain-opacity);
+  transition: opacity 180ms;
+}
+.frame-grain[data-hover="1"] { opacity: 1; }
+
+/* Mobile breakpoints */
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+}
+@media (min-width: 769px) {
+  .mobile-only { display: none !important; }
+}
