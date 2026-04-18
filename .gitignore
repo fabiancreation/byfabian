@@ -9,3 +9,7 @@ dist
 *.log
 .vercel
 next-env.d.ts
+
+# Internal project notes — never push to public repo
+CLAUDE.md
+.claude/
