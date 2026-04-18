@@ -7,7 +7,8 @@ type Props = {
   eyebrow?: string;
 };
 
-const formatPrice = (p: Product): string => {
+const formatPrice = (p: Product): string | null => {
+  if (p.price == null || !p.currency) return null;
   try {
     return new Intl.NumberFormat("de-DE", {
       style: "currency",
@@ -104,7 +105,7 @@ function ProductTile({ product }: { product: Product }) {
       >
         <Image
           src={product.image}
-          alt={product.name}
+          alt={product.name || `Product ${product.id}`}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           style={{ objectFit: "contain", padding: "12%" }}
@@ -128,27 +129,7 @@ function ProductTile({ product }: { product: Product }) {
           </span>
         )}
       </div>
-      <div
-        style={{
-          padding: "14px 16px 18px",
-          textAlign: "center",
-          fontFamily: "var(--font-mono)",
-        }}
-      >
-        <div style={{ fontSize: 11, color: "#5a5a52", lineHeight: 1.4 }}>
-          {product.name}
-        </div>
-        <div
-          style={{
-            marginTop: 6,
-            fontSize: 12,
-            color: "#1a1814",
-            letterSpacing: "0.04em",
-          }}
-        >
-          {formatPrice(product)}
-        </div>
-      </div>
+      <ProductCaption product={product} />
     </article>
   );
 
@@ -165,4 +146,38 @@ function ProductTile({ product }: { product: Product }) {
     );
   }
   return inner;
+}
+
+function ProductCaption({ product }: { product: Product }) {
+  const price = formatPrice(product);
+  // When neither name nor price is supplied, drop the caption entirely so the
+  // tile stays a clean packshot rather than showing an empty text row.
+  if (!product.name && !price) return null;
+  return (
+    <div
+      style={{
+        padding: "14px 16px 18px",
+        textAlign: "center",
+        fontFamily: "var(--font-mono)",
+      }}
+    >
+      {product.name && (
+        <div style={{ fontSize: 11, color: "#5a5a52", lineHeight: 1.4 }}>
+          {product.name}
+        </div>
+      )}
+      {price && (
+        <div
+          style={{
+            marginTop: product.name ? 6 : 0,
+            fontSize: 12,
+            color: "#1a1814",
+            letterSpacing: "0.04em",
+          }}
+        >
+          {price}
+        </div>
+      )}
+    </div>
+  );
 }

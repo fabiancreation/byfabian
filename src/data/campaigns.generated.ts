@@ -239,25 +239,15 @@ export const campaigns: Campaign[] = [
   "products": [
     {
       "id": "shoes",
-      "image": "/images/products/bomber_product-shoes.png",
-      "name": "Suede Sneaker · Pink",
-      "price": 89,
-      "currency": "EUR"
+      "image": "/images/products/bomber_product-shoes.png"
     },
     {
       "id": "pants",
-      "image": "/images/products/bomber_product-pants.png",
-      "name": "Distressed Denim Short",
-      "price": 64,
-      "currency": "EUR"
+      "image": "/images/products/bomber_product-pants.png"
     },
     {
       "id": "jacket",
-      "image": "/images/products/bomber_product-jacket.png",
-      "name": "MA-1 Bomber · Olive",
-      "price": 219,
-      "currency": "EUR",
-      "tag": "BESTSELLER"
+      "image": "/images/products/bomber_product-jacket.png"
     }
   ]
 },

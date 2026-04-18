@@ -15,15 +15,16 @@ export type Product = {
   id: string;
   /** Public path to a packshot-style product photo on a clean background. */
   image: string;
-  /** Display name. */
-  name: string;
-  /** Price as a number; rendered with `currency`. */
-  price: number;
-  /** Currency code (e.g. "EUR", "USD"). Default rendering uses Intl.NumberFormat. */
-  currency: string;
+  /** Display name. Leave unset until you've supplied the real one. */
+  name?: string;
+  /** Price. Leave unset until you've supplied the real one. */
+  price?: number;
+  /** Currency code (e.g. "EUR", "USD"). Required only if `price` is set. */
+  currency?: string;
   /** Optional outbound link to where the product can be bought. */
   url?: string;
-  /** Optional badge above the tile (e.g. "BESTSELLER", "NEW"). */
+  /** Optional badge above the tile (e.g. "BESTSELLER", "NEW"). Only set with
+   *  explicit authorization — commercial claims are the author's to make. */
   tag?: string;
 };
 
