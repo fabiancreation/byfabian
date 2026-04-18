@@ -29,7 +29,7 @@ export function CampaignClosing({ next }: { next: Campaign }) {
             color: studio ? "var(--accent)" : "rgba(245,239,226,0.85)",
           }}
         >
-          NEXT FEATURE · {next.number}
+          NEXT / {next.number}
         </span>
         <div
           style={{
@@ -40,18 +40,17 @@ export function CampaignClosing({ next }: { next: Campaign }) {
             lineHeight: 0.9,
           }}
         >
-          <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400 }}>
-            {next.title}
-          </span>{" "}
-          →
+          {next.title.toUpperCase()}{" "}
+          <span style={{ color: studio ? "var(--accent)" : "var(--chalk)" }}>→</span>
         </div>
       </Link>
       <Link
         href="/contact"
         style={{
           padding: "14px 24px",
-          background: studio ? "var(--accent)" : "var(--chalk)",
-          color: studio ? "var(--on-accent)" : "var(--ink)",
+          background: studio ? "transparent" : "var(--chalk)",
+          border: studio ? "1px solid var(--accent)" : "none",
+          color: studio ? "var(--accent)" : "var(--ink)",
           fontFamily: "var(--font-mono)",
           fontSize: 11,
           letterSpacing: "0.22em",

@@ -27,9 +27,17 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** Pick image by id ("01","02"...) with safe fallback to first available. */
 function pickImage(images: CampaignImage[], id: string): CampaignImage {
   return images.find((i) => i.id === id) || images[0];
+}
+
+/** Truncate to N chars on a word boundary (for the tagline spec cell). */
+function shortTag(s: string, max = 28): string {
+  const clean = s.replace(/\.$/, "").trim();
+  if (clean.length <= max) return clean.toUpperCase();
+  const cut = clean.slice(0, max);
+  const sp = cut.lastIndexOf(" ");
+  return (sp > 12 ? cut.slice(0, sp) : cut).toUpperCase();
 }
 
 export default async function CampaignPage(props: { params: Promise<{ slug: string }> }) {
@@ -39,122 +47,98 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
 
   const { next } = getAdjacentCampaigns(slug);
   const imgs = campaign.images;
+  const featureCount = imgs.filter((i) => i.feature).length;
 
-  // B-rhythm placement: cinematic opener, 2-up portraits, divider, 3-up,
-  // 16:9 beat, full-bleed closer. Fall back to whatever frames exist.
+  // B-rhythm placement: cinematic opener, 2-up portraits, divider, 3-up, 16:9
+  // beat, full-bleed closer. Falls back to whatever frames exist.
   const opener = pickImage(imgs, campaign.heroFrame || "01");
   const pair = [pickImage(imgs, "02"), pickImage(imgs, "03")];
   const triptych = [pickImage(imgs, "04"), pickImage(imgs, "05"), pickImage(imgs, "06")];
   const beat = pickImage(imgs, "07");
   const closer = pickImage(imgs, "08") || pickImage(imgs, "01");
 
+  const titleUpper = campaign.title.toUpperCase();
+  const cat = campaign.category.toUpperCase();
+  // Pull-quote: split tagline into two lines and accent the second half.
+  const taglineRaw = campaign.tagline.replace(/\.$/, "").toUpperCase();
+  const taglineParts = taglineRaw.includes(",")
+    ? [taglineRaw.split(",")[0], taglineRaw.split(",").slice(1).join(",").trim()]
+    : taglineRaw.includes(" — ")
+      ? taglineRaw.split(" — ")
+      : (() => {
+          const words = taglineRaw.split(" ");
+          const half = Math.ceil(words.length / 2);
+          return [words.slice(0, half).join(" "), words.slice(half).join(" ")];
+        })();
+
   return (
     <>
-      <Nav compact />
+      <Nav />
 
-      {/* Breadcrumb / campaign label strip */}
+      {/* Breadcrumb strip */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "10px clamp(20px, 5vw, 32px)",
+          padding: "14px clamp(20px, 5vw, 48px)",
           borderBottom: "1px solid var(--line)",
+          background: "var(--bg2)",
         }}
       >
-        <Link href="/" className="eye">← INDEX</Link>
-        <span className="eye eye-accent">CAMPAIGN {campaign.number} / {campaign.title.toUpperCase()}</span>
+        <Link href="/" className="eye">← INDEX / WORK</Link>
+        <span className="eye eye-accent">CAMPAIGN {campaign.number} / {titleUpper}</span>
       </div>
 
-      {/* Title block */}
-      <header
-        style={{
-          padding: "48px clamp(20px, 5vw, 48px) 28px",
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: 24,
-          alignItems: "end",
-        }}
-        className="campaign-header"
-      >
-        <div>
-          <span className="eye eye-accent">
-            {campaign.category.toUpperCase()} · MMXXVI · {pad(imgs.length)} FRAMES
-          </span>
-          <h1
-            style={{
-              fontWeight: 800,
-              fontSize: "clamp(72px, 14vw, 220px)",
-              lineHeight: 0.82,
-              letterSpacing: "-0.05em",
-              margin: "14px 0 0",
-            }}
-          >
-            <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400 }}>
-              {campaign.title.charAt(0)}
-            </span>
-            {campaign.title.slice(1, -1).toUpperCase()}
-            <span style={{ background: "var(--accent)", color: "var(--on-accent)", padding: "0 0.08em" }}>
-              {campaign.title.slice(-1).toUpperCase()}
-            </span>
-          </h1>
-        </div>
+      {/* Title block — U voice: mono eyebrow, big plain sans, accent dot */}
+      <header style={{ padding: "48px clamp(20px, 5vw, 48px) 28px" }}>
+        <span className="eye eye-accent">
+          {cat} · {campaign.year} · {pad(imgs.length)} FRAMES
+        </span>
+        <h1
+          style={{
+            fontWeight: 800,
+            fontSize: "clamp(72px, 14vw, 220px)",
+            lineHeight: 0.82,
+            letterSpacing: "-0.05em",
+            margin: "14px 0 0",
+          }}
+        >
+          {titleUpper}
+          <span style={{ color: "var(--accent)" }}>.</span>
+        </h1>
         <p
           style={{
-            fontFamily: "var(--font-serif)",
-            fontStyle: "italic",
-            fontSize: "clamp(18px, 2vw, 22px)",
+            fontFamily: "var(--font-mono)",
+            fontSize: 14,
             color: "var(--dim)",
-            lineHeight: 1.35,
-            maxWidth: 460,
-            paddingBottom: 18,
-            margin: 0,
-            justifySelf: "start",
+            marginTop: 20,
+            maxWidth: 620,
+            lineHeight: 1.55,
           }}
-          className="campaign-deck"
         >
-          {campaign.tagline}{" "}
-          {campaign.description.split(".").slice(0, 1).join(".")}.
+          {campaign.description}
         </p>
       </header>
 
-      {/* Meta band — inverted strip */}
-      <div
-        style={{
-          margin: "0 clamp(20px, 5vw, 48px)",
-          padding: "18px 24px",
-          background: "var(--ink)",
-          color: "var(--chalk)",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-          gap: 24,
-        }}
-      >
+      {/* Spec strip — line-bordered cells, no inverted band */}
+      <div className="spec-strip">
         {[
-          ["Model", campaign.modelName],
-          ["Frames", `${pad(imgs.length)} / ${imgs.filter((i) => i.feature).length}★`],
-          ["Tools", campaign.tools.slice(0, 3).join(" · ")],
-          ["Year", String(campaign.year)],
-          ["Category", campaign.category],
-        ].map(([k, v]) => (
-          <div key={k}>
+          ["TAGLINE", shortTag(campaign.tagline)],
+          ["MODEL", campaign.modelName.toUpperCase()],
+          ["FRAMES", `${pad(imgs.length)} / ${featureCount}★`],
+          ["TOOLS", campaign.tools.slice(0, 3).join(" · ").toUpperCase()],
+          ["YEAR", String(campaign.year)],
+        ].map(([k, v], i) => (
+          <div key={k} className="spec-cell" data-first={i === 0 ? "1" : "0"}>
+            <span className="eye">{k}</span>
             <div
               style={{
+                marginTop: 6,
                 fontFamily: "var(--font-mono)",
-                fontSize: 9,
-                color: "var(--accent)",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-              }}
-            >
-              {k}
-            </div>
-            <div
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontStyle: "italic",
-                fontSize: 17,
-                marginTop: 4,
+                fontSize: 12,
+                color: "var(--ink)",
+                wordBreak: "break-word",
               }}
             >
               {v}
@@ -168,7 +152,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         <Frame
           src={opener.src}
           alt={opener.alt}
-          label={`${campaign.title.toUpperCase()} · ${opener.id}`}
+          label={`${titleUpper} · ${opener.id}`}
           aspect="21/9"
           priority
           sizes="100vw"
@@ -191,7 +175,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
               key={img.id}
               src={img.src}
               alt={img.alt}
-              label={`${campaign.title.toUpperCase()} · ${img.id}`}
+              label={`${titleUpper} · ${img.id}`}
               aspect="4/5"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
@@ -199,24 +183,28 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         </div>
       )}
 
-      {/* Pull-quote divider */}
+      {/* Pullquote divider — U voice: tight sans, uppercase, accent word */}
       <div style={{ padding: "0 clamp(20px, 5vw, 48px) 48px", textAlign: "center" }}>
         <blockquote
           style={{
             margin: "0 auto",
-            maxWidth: 760,
-            padding: "36px 0",
+            maxWidth: 820,
+            padding: "40px 0",
             borderTop: "1px solid var(--line-strong)",
             borderBottom: "1px solid var(--line-strong)",
-            fontFamily: "var(--font-serif)",
-            fontStyle: "italic",
-            fontSize: "clamp(24px, 4vw, 36px)",
-            lineHeight: 1.2,
+            fontWeight: 800,
+            fontSize: "clamp(28px, 4.2vw, 40px)",
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
             color: "var(--ink)",
+            textTransform: "uppercase",
           }}
         >
-          {campaign.tagline.replace(/\.$/, "")} <span style={{ color: "var(--accent)" }}>·</span>{" "}
-          <em>without the location budget.</em>
+          {taglineParts[0]}
+          <br />
+          {taglineParts[1] && (
+            <span style={{ color: "var(--accent)" }}>{taglineParts[1]}.</span>
+          )}
         </blockquote>
       </div>
 
@@ -236,7 +224,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
               key={img.id}
               src={img.src}
               alt={img.alt}
-              label={`${campaign.title.toUpperCase()} · ${img.id}`}
+              label={`${titleUpper} · ${img.id}`}
               aspect="4/5"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
@@ -250,7 +238,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
           <Frame
             src={beat.src}
             alt={beat.alt}
-            label={`${campaign.title.toUpperCase()} · ${beat.id}`}
+            label={`${titleUpper} · ${beat.id}`}
             aspect="16/9"
             sizes="100vw"
           />
@@ -263,19 +251,32 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
           <Frame
             src={closer.src}
             alt={closer.alt}
-            label={`${campaign.title.toUpperCase()} · ${closer.id}`}
+            label={`${titleUpper} · ${closer.id}`}
             aspect="21/9"
             sizes="100vw"
           />
         </div>
       )}
 
-      {/* Next feature */}
       {next && next.slug !== campaign.slug && <CampaignClosing next={next} />}
 
       <style>{`
+        .spec-strip {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          border-top: 1px solid var(--line);
+          border-bottom: 1px solid var(--line);
+        }
+        .spec-cell {
+          padding: 16px 20px;
+        }
+        .spec-cell + .spec-cell { border-left: 1px solid var(--line); }
+        .spec-cell:nth-child(2n+1) { border-left: none; }
         @media (min-width: 769px) {
-          .campaign-header { grid-template-columns: 1fr 1fr; gap: 40px; }
+          .spec-strip { grid-template-columns: repeat(5, 1fr) !important; }
+          .spec-cell + .spec-cell { border-left: 1px solid var(--line); }
+          .spec-cell:nth-child(2n+1) { border-left: 1px solid var(--line); }
+          .spec-cell[data-first="1"] { border-left: none !important; }
           .grid-2-up { grid-template-columns: 1fr 1fr !important; }
           .grid-3-up { grid-template-columns: 1fr 1fr 1fr !important; }
         }
