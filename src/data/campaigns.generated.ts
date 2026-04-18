@@ -364,13 +364,14 @@ export const campaigns: Campaign[] = [
   "number": "04",
   "modelSlug": "yamada",
   "modelName": "Yamada",
-  "category": "Editorial",
+  "category": "Editorial Studies",
   "year": 2026,
-  "tagline": "A new campaign. Fresh frames.",
-  "description": "A campaign description — swap this text with the brief, the feel, the reason the work exists.",
+  "tagline": "Studies, b-sides, and frames between campaigns.",
+  "description": "Six frames that didn't fit anywhere else — colour studies, lighting tests, character moments. The cutting-room floor turned into its own short series. Less polished than the campaigns, more honest about how the work gets made.",
   "tools": [
     "Flux 1.1",
-    "ComfyUI"
+    "ComfyUI",
+    "Lightroom"
   ],
   "cover": "/images/yamada/mix/01.jpg",
   "coverAspect": "landscape",
@@ -381,9 +382,9 @@ export const campaigns: Campaign[] = [
     "width": 2400,
     "height": 1792,
     "aspect": "landscape",
-    "feature": false
+    "feature": true
   },
-  "draft": true,
+  "draft": false,
   "images": [
     {
       "id": "01",
@@ -392,7 +393,7 @@ export const campaigns: Campaign[] = [
       "width": 2400,
       "height": 1792,
       "aspect": "landscape",
-      "feature": false
+      "feature": true
     },
     {
       "id": "02",
