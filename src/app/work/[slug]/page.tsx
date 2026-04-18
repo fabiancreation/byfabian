@@ -1,8 +1,10 @@
+import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { campaigns, getCampaign, getAdjacentCampaigns } from "@/data/campaigns";
 import { Nav } from "@/components/Nav";
 import { Frame } from "@/components/Frame";
+import { ProductStrip } from "@/components/ProductStrip";
 import { planLayout } from "@/lib/layout";
 import { CampaignClosing } from "./CampaignClosing";
 
@@ -134,31 +136,40 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
       {/* Body — planner-driven, every frame at its natural aspect */}
       <div style={{ paddingTop: 40 }} />
       {rows.map((row, idx) => {
+        // Inject the optional product strip directly after the first body row.
+        const trailing =
+          idx === 0 && campaign.products && campaign.products.length > 0 ? (
+            <ProductStrip products={campaign.products} />
+          ) : null;
+
         if (row.kind === "pullquote") {
           return (
-            <div key={`pq-${idx}`} style={{ padding: "8px clamp(20px, 5vw, 48px) 48px", textAlign: "center" }}>
-              <blockquote
-                style={{
-                  margin: "0 auto",
-                  maxWidth: 820,
-                  padding: "40px 0",
-                  borderTop: "1px solid var(--line-strong)",
-                  borderBottom: "1px solid var(--line-strong)",
-                  fontWeight: 800,
-                  fontSize: "clamp(28px, 4.2vw, 40px)",
-                  lineHeight: 1.05,
-                  letterSpacing: "-0.02em",
-                  color: "var(--ink)",
-                  textTransform: "uppercase",
-                }}
-              >
-                {taglineParts[0]}
-                <br />
-                {taglineParts[1] && (
-                  <span style={{ color: "var(--accent)" }}>{taglineParts[1]}.</span>
-                )}
-              </blockquote>
-            </div>
+            <Fragment key={`pq-${idx}`}>
+              <div style={{ padding: "8px clamp(20px, 5vw, 48px) 48px", textAlign: "center" }}>
+                <blockquote
+                  style={{
+                    margin: "0 auto",
+                    maxWidth: 820,
+                    padding: "40px 0",
+                    borderTop: "1px solid var(--line-strong)",
+                    borderBottom: "1px solid var(--line-strong)",
+                    fontWeight: 800,
+                    fontSize: "clamp(28px, 4.2vw, 40px)",
+                    lineHeight: 1.05,
+                    letterSpacing: "-0.02em",
+                    color: "var(--ink)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {taglineParts[0]}
+                  <br />
+                  {taglineParts[1] && (
+                    <span style={{ color: "var(--accent)" }}>{taglineParts[1]}.</span>
+                  )}
+                </blockquote>
+              </div>
+              {trailing}
+            </Fragment>
           );
         }
 
@@ -167,65 +178,73 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         if (row.kind === "wide") {
           const f = row.frames[0];
           return (
-            <div key={`row-${idx}`} style={{ padding: "0 clamp(20px, 5vw, 48px) 24px" }}>
-              <Frame
-                src={f.src}
-                alt={f.alt}
-                label={`${titleUpper} · ${f.id}`}
-                width={f.width}
-                height={f.height}
-                sizes="100vw"
-                priority={isFirstRow}
-              />
-            </div>
-          );
-        }
-
-        if (row.kind === "solo") {
-          const f = row.frames[0];
-          return (
-            <div key={`row-${idx}`} style={{ padding: "0 clamp(20px, 5vw, 48px) 24px", display: "flex", justifyContent: "center" }}>
-              <div style={{ width: "100%", maxWidth: 720 }}>
+            <Fragment key={`row-${idx}`}>
+              <div style={{ padding: "0 clamp(20px, 5vw, 48px) 24px" }}>
                 <Frame
                   src={f.src}
                   alt={f.alt}
                   label={`${titleUpper} · ${f.id}`}
                   width={f.width}
                   height={f.height}
-                  sizes="(max-width: 768px) 100vw, 720px"
+                  sizes="100vw"
                   priority={isFirstRow}
                 />
               </div>
-            </div>
+              {trailing}
+            </Fragment>
+          );
+        }
+
+        if (row.kind === "solo") {
+          const f = row.frames[0];
+          return (
+            <Fragment key={`row-${idx}`}>
+              <div style={{ padding: "0 clamp(20px, 5vw, 48px) 24px", display: "flex", justifyContent: "center" }}>
+                <div style={{ width: "100%", maxWidth: 720 }}>
+                  <Frame
+                    src={f.src}
+                    alt={f.alt}
+                    label={`${titleUpper} · ${f.id}`}
+                    width={f.width}
+                    height={f.height}
+                    sizes="(max-width: 768px) 100vw, 720px"
+                    priority={isFirstRow}
+                  />
+                </div>
+              </div>
+              {trailing}
+            </Fragment>
           );
         }
 
         // pair or trio
         const cols = row.kind === "trio" ? 3 : 2;
         return (
-          <div
-            key={`row-${idx}`}
-            className={cols === 3 ? "row-trio" : "row-pair"}
-            style={{
-              padding: "0 clamp(20px, 5vw, 48px) 24px",
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 16,
-            }}
-          >
-            {row.frames.map((f, fIdx) => (
-              <Frame
-                key={f.id}
-                src={f.src}
-                alt={f.alt}
-                label={`${titleUpper} · ${f.id}`}
-                width={f.width}
-                height={f.height}
-                sizes={cols === 3 ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 100vw, 50vw"}
-                priority={isFirstRow && fIdx === 0}
-              />
-            ))}
-          </div>
+          <Fragment key={`row-${idx}`}>
+            <div
+              className={cols === 3 ? "row-trio" : "row-pair"}
+              style={{
+                padding: "0 clamp(20px, 5vw, 48px) 24px",
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: 16,
+              }}
+            >
+              {row.frames.map((f, fIdx) => (
+                <Frame
+                  key={f.id}
+                  src={f.src}
+                  alt={f.alt}
+                  label={`${titleUpper} · ${f.id}`}
+                  width={f.width}
+                  height={f.height}
+                  sizes={cols === 3 ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 100vw, 50vw"}
+                  priority={isFirstRow && fIdx === 0}
+                />
+              ))}
+            </div>
+            {trailing}
+          </Fragment>
         );
       })}
 

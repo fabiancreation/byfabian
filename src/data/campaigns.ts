@@ -8,7 +8,7 @@ import type { Campaign } from "./types";
 const campaigns: Campaign[] = all.filter((c) => !c.draft);
 
 export { campaigns, models };
-export type { Aspect, Campaign, CampaignImage, Model } from "./types";
+export type { Aspect, Campaign, CampaignImage, Model, Product } from "./types";
 
 export function getCampaign(slug: string): Campaign | undefined {
   return campaigns.find((c) => c.slug === slug);
