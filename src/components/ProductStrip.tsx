@@ -29,26 +29,8 @@ export function ProductStrip({ products, eyebrow = "WORN IN THIS CAMPAIGN" }: Pr
   return (
     <section className="product-strip">
       <div className="product-strip__head">
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "#5a5a52",
-          }}
-        >
-          ◉ {eyebrow}
-        </span>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "#5a5a52",
-          }}
-        >
+        <span className="eye">◉ {eyebrow}</span>
+        <span className="eye">
           {String(products.length).padStart(2, "0")} ITEMS
         </span>
       </div>
@@ -61,16 +43,20 @@ export function ProductStrip({ products, eyebrow = "WORN IN THIS CAMPAIGN" }: Pr
 
       <style>{`
         .product-strip {
-          background: #f4ede0;
-          color: #1a1814;
+          background: var(--bg2);
+          color: var(--ink);
           padding: 28px clamp(20px, 5vw, 48px) 36px;
+          margin: 16px 0;
+          border-top: 1px solid var(--line);
+          border-bottom: 1px solid var(--line);
+          transition: background 400ms, border-color 400ms;
         }
         .product-strip__head {
           display: flex;
           justify-content: space-between;
           align-items: baseline;
           padding-bottom: 20px;
-          border-bottom: 1px solid rgba(26,24,20,0.12);
+          border-bottom: 1px solid var(--line);
           margin-bottom: 24px;
         }
         .product-strip__grid {
