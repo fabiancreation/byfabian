@@ -16,6 +16,8 @@
     { "id": "11", "base": "11", "width": 2400, "height": 1339, "aspect": "landscape" },
     { "id": "12", "base": "12", "width": 2400, "height": 1339, "aspect": "landscape" },
     { "id": "13", "base": "13", "width": 2400, "height": 1339, "aspect": "landscape" },
-    { "id": "14", "base": "14", "width": 2400, "height": 1339, "aspect": "landscape" }
+    { "id": "14", "base": "14", "width": 1792, "height": 2400, "aspect": "portrait" },
+    { "id": "15", "base": "15", "width": 1792, "height": 2400, "aspect": "portrait" },
+    { "id": "16", "base": "16", "width": 1376, "height": 768, "aspect": "landscape" }
   ]
 }
