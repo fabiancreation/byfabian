@@ -197,7 +197,7 @@ export const campaigns: Campaign[] = [
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
-      "feature": true
+      "feature": false
     },
     {
       "id": "06",
@@ -212,8 +212,8 @@ export const campaigns: Campaign[] = [
       "id": "07",
       "src": "/images/yamada/bomber-jacket/07.jpg",
       "alt": "Yamada — Bomber — frame 07",
-      "width": 1792,
-      "height": 2400,
+      "width": 1400,
+      "height": 1875,
       "aspect": "portrait",
       "feature": false
     },
@@ -239,18 +239,54 @@ export const campaigns: Campaign[] = [
       "id": "10",
       "src": "/images/yamada/bomber-jacket/10.jpg",
       "alt": "Yamada — Bomber — frame 10",
-      "width": 1792,
-      "height": 2400,
-      "aspect": "portrait",
+      "width": 2400,
+      "height": 1339,
+      "aspect": "landscape",
       "feature": false
     },
     {
       "id": "11",
       "src": "/images/yamada/bomber-jacket/11.jpg",
       "alt": "Yamada — Bomber — frame 11",
+      "width": 2400,
+      "height": 1339,
+      "aspect": "landscape",
+      "feature": false
+    },
+    {
+      "id": "12",
+      "src": "/images/yamada/bomber-jacket/12.jpg",
+      "alt": "Yamada — Bomber — frame 12",
+      "width": 2400,
+      "height": 1339,
+      "aspect": "landscape",
+      "feature": false
+    },
+    {
+      "id": "13",
+      "src": "/images/yamada/bomber-jacket/13.jpg",
+      "alt": "Yamada — Bomber — frame 13",
+      "width": 2400,
+      "height": 1339,
+      "aspect": "landscape",
+      "feature": false
+    },
+    {
+      "id": "14",
+      "src": "/images/yamada/bomber-jacket/14.jpg",
+      "alt": "Yamada — Bomber — frame 14",
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
+      "feature": false
+    },
+    {
+      "id": "15",
+      "src": "/images/yamada/bomber-jacket/15.jpg",
+      "alt": "Yamada — Bomber — frame 15",
+      "width": 2400,
+      "height": 1339,
+      "aspect": "landscape",
       "feature": false
     }
   ],
