@@ -26,7 +26,7 @@ img, video { display: block; max-width: 100%; }
   --on-accent: #0c0c0a;
   --chalk: #f2efe6;
   --scrim: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(12,12,10,0) 55%, rgba(12,12,10,0.85) 100%);
-  --scrim-top: linear-gradient(180deg, rgba(12,12,10,0.7) 0%, rgba(12,12,10,0.2) 40%, transparent 70%);
+  --scrim-top: linear-gradient(180deg, rgba(12,12,10,0.55) 0%, rgba(12,12,10,0.1) 25%, transparent 50%);
   --grain-opacity: 0.10;
   --accent-glow: 0 0 12px rgba(156,255,92,0.45);
   --hero-overlay-text: rgba(242,239,230,0.96);
@@ -49,7 +49,7 @@ img, video { display: block; max-width: 100%; }
   --on-accent: #f5efe2;
   --chalk: #f5efe2;
   --scrim: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(20,35,43,0) 55%, rgba(20,35,43,0.72) 100%);
-  --scrim-top: linear-gradient(180deg, rgba(20,35,43,0.58) 0%, rgba(20,35,43,0.15) 40%, transparent 70%);
+  --scrim-top: linear-gradient(180deg, rgba(20,35,43,0.42) 0%, rgba(20,35,43,0.08) 25%, transparent 50%);
   --grain-opacity: 0.05;
   --accent-glow: 0 0 12px rgba(232,92,61,0.45);
   --hero-overlay-text: #f5efe2;
