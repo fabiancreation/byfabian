@@ -135,7 +135,6 @@ function Wrapper({
       onMouseLeave={() => setHover(false)}
     >
       {children}
-      <div className="frame-grain" data-hover={hover ? "1" : "0"} />
       {label && (
         <div
           style={{

@@ -27,14 +27,11 @@ img, video { display: block; max-width: 100%; }
   --chalk: #f2efe6;
   --scrim: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(12,12,10,0) 55%, rgba(12,12,10,0.85) 100%);
   --scrim-top: linear-gradient(180deg, rgba(12,12,10,0.35) 0%, rgba(12,12,10,0.03) 25%, transparent 45%);
-  --grain-opacity: 0.10;
   --accent-glow: 0 0 12px rgba(156,255,92,0.45);
   --hero-overlay-text: rgba(242,239,230,0.96);
   --gradient-card: linear-gradient(180deg, transparent, rgba(12,12,10,0.88));
   --gradient-knockout: linear-gradient(180deg, rgba(12,12,10,0.82) 0%, rgba(12,12,10,0.65) 55%, rgba(12,12,10,0.95) 100%);
   --top-radial: radial-gradient(ellipse at top left, rgba(12,12,10,0.72), transparent 70%);
-  --grain-stripe: repeating-linear-gradient(0deg, rgba(156,255,92,0) 0 2px, rgba(156,255,92,0.08) 2px 3px);
-  --grain-blend: screen;
   --slider-track: #1a1a17;
 }
 
@@ -50,14 +47,11 @@ img, video { display: block; max-width: 100%; }
   --chalk: #f5efe2;
   --scrim: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(20,35,43,0) 55%, rgba(20,35,43,0.72) 100%);
   --scrim-top: linear-gradient(180deg, rgba(20,35,43,0.26) 0%, rgba(20,35,43,0.02) 25%, transparent 45%);
-  --grain-opacity: 0.05;
   --accent-glow: 0 0 12px rgba(232,92,61,0.45);
   --hero-overlay-text: #f5efe2;
   --gradient-card: linear-gradient(180deg, transparent, rgba(20,35,43,0.88));
   --gradient-knockout: linear-gradient(180deg, rgba(199,221,225,0.7) 0%, rgba(199,221,225,0.5) 55%, rgba(199,221,225,0.92) 100%);
   --top-radial: radial-gradient(ellipse at top left, rgba(20,35,43,0.5), transparent 70%);
-  --grain-stripe: repeating-linear-gradient(0deg, rgba(20,35,43,0) 0 2px, rgba(20,35,43,0.04) 2px 3px);
-  --grain-blend: multiply;
   --slider-track: #d8e7eb;
 }
 
@@ -89,18 +83,6 @@ img, video { display: block; max-width: 100%; }
 
 /* No-flash theme: applied by inline script in layout before paint. */
 .no-flash * { transition: none !important; }
-
-/* Frame hover grain — driven by CSS vars per theme */
-.frame-grain {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: var(--grain-stripe);
-  mix-blend-mode: var(--grain-blend);
-  opacity: var(--grain-opacity);
-  transition: opacity 180ms;
-}
-.frame-grain[data-hover="1"] { opacity: 1; }
 
 /* Mobile breakpoints */
 @media (max-width: 768px) {
