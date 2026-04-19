@@ -57,7 +57,7 @@ function HeroA({ campaign }: Props) {
           <h1
             style={{
               fontWeight: 800,
-              fontSize: "clamp(64px, 13vw, 160px)",
+              fontSize: "clamp(64px, 13vw, 140px)",
               lineHeight: 0.84,
               letterSpacing: "-0.05em",
               margin: "14px 0 0",
