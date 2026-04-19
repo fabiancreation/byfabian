@@ -4,8 +4,8 @@
   "source": "Bomber Jacket",
   "images": [
     { "id": "01", "base": "01", "width": 2400, "height": 1792, "aspect": "landscape" },
-    { "id": "02", "base": "02", "width": 2400, "height": 1339, "aspect": "landscape" },
-    { "id": "03", "base": "03", "width": 2400, "height": 1792, "aspect": "landscape" },
+    { "id": "02", "base": "02", "width": 2400, "height": 1792, "aspect": "landscape" },
+    { "id": "03", "base": "03", "width": 2400, "height": 1339, "aspect": "landscape" },
     { "id": "04", "base": "04", "width": 2400, "height": 1339, "aspect": "landscape" },
     { "id": "05", "base": "05", "width": 1792, "height": 2400, "aspect": "portrait" },
     { "id": "06", "base": "06", "width": 1792, "height": 2400, "aspect": "portrait" },
@@ -16,7 +16,6 @@
     { "id": "11", "base": "11", "width": 2400, "height": 1339, "aspect": "landscape" },
     { "id": "12", "base": "12", "width": 2400, "height": 1339, "aspect": "landscape" },
     { "id": "13", "base": "13", "width": 2400, "height": 1339, "aspect": "landscape" },
-    { "id": "14", "base": "14", "width": 1792, "height": 2400, "aspect": "portrait" },
-    { "id": "15", "base": "15", "width": 2400, "height": 1339, "aspect": "landscape" }
+    { "id": "14", "base": "14", "width": 2400, "height": 1339, "aspect": "landscape" }
   ]
 }
