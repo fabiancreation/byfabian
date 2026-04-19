@@ -23,13 +23,13 @@ export const campaigns: Campaign[] = [
   "year": 2026,
   "tagline": "Ten frames. One unguarded hour.",
   "description": "A study in close quiet. No wardrobe, no set — just natural window light, bare skin, and the small shifts of a face that has nothing to prove. The series reads like a casting tape for someone who already has the part.",
-  "cover": "/images/yamada/face-expressions/01.jpg",
+  "cover": "/images/yamada/face-expressions/03.jpg",
   "coverAspect": "portrait",
-  "heroFrame": "03",
+  "heroFrame": "01",
   "heroImage": {
-    "id": "03",
-    "src": "/images/yamada/face-expressions/03.jpg",
-    "alt": "Yamada — Face — frame 03",
+    "id": "01",
+    "src": "/images/yamada/face-expressions/01.jpg",
+    "alt": "Yamada — Face — frame 01",
     "width": 1792,
     "height": 2400,
     "aspect": "portrait",
@@ -44,7 +44,7 @@ export const campaigns: Campaign[] = [
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
-      "feature": false
+      "feature": true
     },
     {
       "id": "02",
@@ -62,7 +62,7 @@ export const campaigns: Campaign[] = [
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
-      "feature": true
+      "feature": false
     },
     {
       "id": "04",
@@ -128,7 +128,7 @@ export const campaigns: Campaign[] = [
       "feature": false
     }
   ],
-  "layoutHints": ["pair", "pair", "pair", "pullquote", "pair", "pair"]
+  "layoutHints": ["pair", "pair", "pullquote", "pair", "pair", "pair"]
 },
 {
   "slug": "yamada-bomber-jacket",
