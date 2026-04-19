@@ -2,7 +2,7 @@
 // Campaign metadata lives in public/images/<model>/<campaign>/campaign.json.
 // Model metadata lives in public/images/<model>/model.json.
 
-import type { Aspect, Campaign, Model } from "./types";
+import type { Aspect, Campaign, LayoutHint, Model } from "./types";
 
 export const models: Model[] = [
 {
@@ -127,7 +127,8 @@ export const campaigns: Campaign[] = [
       "aspect": "portrait",
       "feature": false
     }
-  ]
+  ],
+  "layoutHints": ["pair", "pair", "pair", "pullquote", "pair", "pair"]
 },
 {
   "slug": "yamada-bomber-jacket",
@@ -466,4 +467,4 @@ export const campaigns: Campaign[] = [
 }
 ];
 
-export type { Aspect, Campaign, Model };
+export type { Aspect, Campaign, LayoutHint, Model };

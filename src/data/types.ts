@@ -34,6 +34,8 @@ export type Model = {
   bio?: string;
 };
 
+export type LayoutHint = "wide" | "trio" | "pair" | "solo" | "pullquote";
+
 export type Campaign = {
   slug: string;
   title: string;
@@ -55,4 +57,7 @@ export type Campaign = {
   /** Optional shoppable products featured in the campaign — rendered as a
    *  light-themed strip after the first body image. */
   products?: Product[];
+  /** Manual override for body row layout. Walked over images[] in order
+   *  (respecting excludeIds). Use when auto-planner grouping doesn't fit. */
+  layoutHints?: LayoutHint[];
 };

@@ -45,7 +45,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
   const { next } = getAdjacentCampaigns(slug);
   const imgs = campaign.images;
   // No separate hero — the work speaks first via the body opener.
-  const rows = planLayout(imgs, []);
+  const rows = planLayout(imgs, [], campaign.layoutHints);
 
   const titleUpper = campaign.title.toUpperCase();
   const cat = campaign.category.toUpperCase();

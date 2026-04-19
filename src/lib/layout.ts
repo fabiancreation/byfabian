@@ -1,10 +1,17 @@
-import type { CampaignImage } from "@/data/types";
+import type { CampaignImage, LayoutHint } from "@/data/types";
 
 export type RowKind = "wide" | "trio" | "pair" | "solo";
 
 export type LayoutRow =
   | { kind: RowKind; frames: CampaignImage[] }
   | { kind: "pullquote"; frames?: never };
+
+const HINT_SIZE: Record<Exclude<LayoutHint, "pullquote">, number> = {
+  wide: 1,
+  trio: 3,
+  pair: 2,
+  solo: 1,
+};
 
 /**
  * Group a run of consecutive portrait frames into 2- or 3-frame rows,
@@ -48,9 +55,30 @@ function groupPortraits(n: number): number[] {
  * presented separately above this sequence and should be excluded via
  * `excludeIds` to prevent duplication.
  */
-export function planLayout(images: CampaignImage[], excludeIds: string[] = []): LayoutRow[] {
+export function planLayout(
+  images: CampaignImage[],
+  excludeIds: string[] = [],
+  hints?: LayoutHint[],
+): LayoutRow[] {
   const skip = new Set(excludeIds);
   const body = images.filter((i) => !skip.has(i.id));
+
+  if (hints && hints.length > 0) {
+    const rows: LayoutRow[] = [];
+    let i = 0;
+    for (const hint of hints) {
+      if (hint === "pullquote") {
+        rows.push({ kind: "pullquote" });
+        continue;
+      }
+      const size = HINT_SIZE[hint];
+      const slice = body.slice(i, i + size);
+      if (slice.length === 0) break;
+      rows.push({ kind: hint, frames: slice });
+      i += size;
+    }
+    return rows;
+  }
 
   const rows: LayoutRow[] = [];
   let i = 0;
