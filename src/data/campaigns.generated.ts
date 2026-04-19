@@ -23,7 +23,7 @@ export const campaigns: Campaign[] = [
   "year": 2026,
   "tagline": "Ten frames. One unguarded hour.",
   "description": "A study in close quiet. No wardrobe, no set — just natural window light, bare skin, and the small shifts of a face that has nothing to prove. The series reads like a casting tape for someone who already has the part.",
-  "cover": "/images/yamada/face-expressions/03.jpg",
+  "cover": "/images/yamada/face-expressions/07.jpg",
   "coverAspect": "portrait",
   "heroFrame": "01",
   "heroImage": {
@@ -71,7 +71,7 @@ export const campaigns: Campaign[] = [
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
-      "feature": false
+      "feature": true
     },
     {
       "id": "05",
@@ -89,7 +89,7 @@ export const campaigns: Campaign[] = [
       "width": 1792,
       "height": 2400,
       "aspect": "portrait",
-      "feature": true
+      "feature": false
     },
     {
       "id": "07",
