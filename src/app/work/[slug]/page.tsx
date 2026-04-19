@@ -85,7 +85,7 @@ export default async function CampaignPage(props: { params: Promise<{ slug: stri
         <h1
           style={{
             fontWeight: 800,
-            fontSize: "clamp(72px, 14vw, 220px)",
+            fontSize: "clamp(72px, 14vw, 180px)",
             lineHeight: 0.82,
             letterSpacing: "-0.05em",
             margin: "14px 0 0",
