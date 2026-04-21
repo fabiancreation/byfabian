@@ -24,7 +24,7 @@ export function Ticker() {
       <div
         style={{
           fontFamily: "var(--font-mono)",
-          fontSize: 14,
+          fontSize: 12,
           letterSpacing: "0.28em",
           color: "var(--dim)",
           display: "inline-block",
