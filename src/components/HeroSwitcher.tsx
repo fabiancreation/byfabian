@@ -45,7 +45,7 @@ export function HeroSwitcher({ campaigns, mobile = false }: Props) {
               transition: "background 160ms, color 160ms, border-color 160ms",
             }}
           >
-            {c.number} · {c.title}
+            {c.title}
           </button>
         );
       })}

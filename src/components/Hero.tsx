@@ -52,7 +52,7 @@ function HeroA({ campaign }: Props) {
       >
         <div>
           <span className="eye" style={{ color: "var(--accent)" }}>
-            ◉ NOW SHOWING — CAMPAIGN {campaign.number}
+            ◉ NOW SHOWING
           </span>
           <h1
             style={{
@@ -78,7 +78,7 @@ function HeroA({ campaign }: Props) {
               marginTop: 18,
             }}
           >
-            [ {campaign.category.toUpperCase()} / {campaign.year} / {String(campaign.images.length).padStart(2, "0")}F ] — {campaign.tagline}
+            [ {campaign.category.toUpperCase()} / {campaign.year} / {campaign.images.length} FRAMES ] — {campaign.tagline}
           </p>
         </div>
         <Link
@@ -354,7 +354,7 @@ export function HeroMobile({ campaign }: Props) {
     <section style={{ background: "var(--bg)" }}>
       <div style={{ padding: "24px 20px 16px" }}>
         <span className="eye" style={{ color: "var(--accent)" }}>
-          ◉ SHOWING — {campaign.number}
+          ◉ NOW SHOWING
         </span>
         <h1
           style={{
@@ -391,7 +391,7 @@ export function HeroMobile({ campaign }: Props) {
           margin: 0,
         }}
       >
-        [ {campaign.category.toUpperCase()} · {campaign.year} · {String(campaign.images.length).padStart(2, "0")}F ] — {campaign.tagline}
+        [ {campaign.category.toUpperCase()} · {campaign.year} · {campaign.images.length} FRAMES ] — {campaign.tagline}
       </p>
       <div style={{ padding: "0 20px 16px" }}>
         <Link
