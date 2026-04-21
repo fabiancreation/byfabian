@@ -310,16 +310,16 @@ export const campaigns: Campaign[] = [
   ],
   "products": [
     {
-      "id": "shoes",
-      "image": "/images/products/bomber_product-shoes.png"
+      "id": "jacket",
+      "image": "/images/products/bomber_product-jacket.png"
     },
     {
       "id": "pants",
       "image": "/images/products/bomber_product-pants.png"
     },
     {
-      "id": "jacket",
-      "image": "/images/products/bomber_product-jacket.png"
+      "id": "shoes",
+      "image": "/images/products/bomber_product-shoes.png"
     }
   ]
 },
